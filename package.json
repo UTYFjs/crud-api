@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon",
-    "start:prod": "",
+    "start:prod": "tsc && node build/index.js",
     "build": "tsc src/index.ts",
     "start": "ts-node src/index.ts",
     "lint": "npx eslint ./src"
