@@ -22,6 +22,7 @@
   "homepage": "https://github.com/UTYFjs/crud-api#readme",
   "devDependencies": {
     "@types/node": "^20.3.2",
+    "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
     "eslint": "^8.43.0",
@@ -32,9 +33,9 @@
     "prettier": "^2.8.8",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.5"
-
   },
   "dependencies": {
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "uuid": "^9.0.0"
   }
 }
