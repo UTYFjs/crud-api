@@ -39,14 +39,13 @@
                 }
             }
         ],
-        "max-lines-per-function": ["error", 45],
+        "max-lines-per-function": [
+            "error",
+            45
+        ],
         "indent": [
             "error",
             "tab"
-        ],
-        "linebreak-style": [
-            "error",
-            "windows"
         ],
         "quotes": [
             "error",
