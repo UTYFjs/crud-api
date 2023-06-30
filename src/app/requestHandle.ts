@@ -108,7 +108,7 @@ export const requestHandle = async (req: IncomingMessage, res: ServerResponse<In
 	}
 };
 
-const getBodyRequest = async (req:IncomingMessage): Promise<UserInterface> => {
+export const getBodyRequest = async (req:IncomingMessage): Promise<UserInterface> => {
 	return new Promise ((res, rej) => {
 		let body = "";
 		req.on("data", (chunk) => {
