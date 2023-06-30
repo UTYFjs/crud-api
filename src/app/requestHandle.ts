@@ -84,7 +84,7 @@ export const requestHandle = async (req: IncomingMessage, res: ServerResponse<In
 				sendError(res, StatusCode.METHOD_NOT_ALLOWED, ErrorMessage.METHOD_NOT_ALLOWED);
 			}
 		} else {
-			sendError(res, StatusCode.NOT_FOUND, ErrorMessage.NOT_FOUND);
+			sendError(res, StatusCode.NOT_FOUND, ErrorMessage.REQUEST_URL_FORMAT_INVALID);
 		}
 	} catch{
 		sendError(res, StatusCode.SERVER_ERROR, ErrorMessage.SERVER_ERROR);

@@ -1,15 +1,19 @@
-import {IncomingMessage, ServerResponse, createServer} from "http";
+import {IncomingMessage, Server, ServerResponse, createServer} from "http";
 import {config} from "dotenv";
 import { UserInterface } from "./app/db";
 import { getBodyRequest, requestHandle } from "./app/requestHandle";
 import { availableParallelism } from "os";
 import cluster from "cluster";
 
+export let server: Server;
+
 const numCPUs = availableParallelism();
 
 config();
 
 const PORT=process.env.PORT ?? 4000;
+
+
 
 if(process.env.MULTI){
 	
@@ -51,7 +55,7 @@ if(process.env.MULTI){
 		});
 	}
 }else{
-	const server = createServer(async (req: IncomingMessage, res: ServerResponse<IncomingMessage>) => {
+	server = createServer(async (req: IncomingMessage, res: ServerResponse<IncomingMessage>) => {
 		requestHandle(req, res);
 	});
 	server.listen(PORT, () => {
