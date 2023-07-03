@@ -1,13 +1,14 @@
 import {IncomingMessage, Server, ServerResponse, createServer} from "http";
 import {config} from "dotenv";
-import { UserInterface } from "./app/db";
-import { getBodyRequest, requestHandle } from "./app/requestHandle";
-import { availableParallelism } from "os";
+import { requestHandle } from "./app/requestHandle";
+import {  cpus } from "os";
 import cluster from "cluster";
+
+
 
 export let server: Server;
 
-const numCPUs = availableParallelism();
+const numCPUs = cpus().length;
 
 config();
 
@@ -19,40 +20,48 @@ if(process.env.MULTI){
 	
 	if (cluster.isPrimary) {
 		console.log("multiple instance of application", `available parallelism ${numCPUs}`);
-		console.log(`Primary ${process.pid} is running`);
+		console.log(`Primary PORT ${PORT} process.pid ${process.pid} is running`);
 
 		// Форк рабочих.
-		for (let i = 0; i < numCPUs-1; i++) {
-			const worker = cluster.fork();
-			worker.on("message", (msg) => {console.log(msg);});
-			worker.send("hello");
-			console.log(`worker PID ${worker.process.pid}`);
-			
+		for (let i = 0; i < numCPUs; i++) {
+			const port = +PORT +1+i;
+			cluster.fork(port);			
 		}
 
-		cluster.on("exit", (worker, code, signal) => {
-			console.log(`рабочий ${worker.process.pid} умер`);
+		cluster.on("message", (worker, code) => {
+			console.log(`Worker PID ${worker.process.pid} sent message: ${code}`);
 		});
-		
+		cluster.on("exit", (worker) => {
+			console.log(`worker ${worker.process.pid} died`);
+			// born new worker
+			cluster.fork();
+		});
+		const balancer = createServer(requestHandle);
+		//const balancer = createLoadBalancer(numCPUs);
+		balancer.listen(PORT, () => {
+			console.log(`Load balancer ${process.pid} started on port ${PORT}`);
+			console.log("Please wait few seconds created workers...");
+		});
 	} else {
-		// Рабочие могут совместно использовать любое TCP-соединение.
-		// В данном случае это HTTP-сервер
+		// workers TCP-connection.
+		//  HTTP-server
 		const worker = createServer((req, res) => {
-			const body = getBodyRequest(req);
-			console.log(body);
-			res.writeHead(200);
-			res.end("hello world\n");
-		})
-			.listen(PORT, () => {
-				console.log(` Worker is started on port ${PORT}. PID: ${process.pid}`);
-				process.on("message", (msg) => {
-					console.log(msg);
-				});
-			});
-		console.log(` Worker is started on port ${PORT}. PID: ${process.pid}`);
-		worker.on("message", (msg) => {
-			console.log(msg);
+			requestHandle(req, res);
 		});
+		if (cluster && cluster.worker){
+			const workerId = cluster.worker.id;
+	
+			worker.listen(+PORT + workerId, () => {
+				console.log(` Worker is started on port ${+PORT + workerId}. PID: ${process.pid}`);
+			});
+			worker.on("connection", () => {
+				//console.log(`Worker ${+PORT + workerId} is handling a request`);
+			});
+		}
+
+
+		
+
 	}
 }else{
 	server = createServer(async (req: IncomingMessage, res: ServerResponse<IncomingMessage>) => {
@@ -60,6 +69,9 @@ if(process.env.MULTI){
 	});
 	server.listen(PORT, () => {
 		console.log(` Server is running on port ${PORT}. PID: ${process.pid}`);
+	});
+	server.on("connection", () => {
+		//console.log(`Server ${PORT} is handling a request`);
 	});
 
 }

@@ -163,30 +163,5 @@ describe("scenatio 3 - invalid request", () => {
 		expect(resultEmptyHobbies.statusCode).toBe(StatusCode.BAD_REQUEST);
 		expect(resultEmptyHobbies.body).toEqual({ error: ErrorMessage.REQUEST_BODY_FORMAT_INVALID });
 	});
-  	/*it("post if wrong data types", async () => {
-		const emptyUsername = { username: 1, hobbies: ["soccer"], age: 23 };
-		const emptyAge = { username: "admin", hobbies: ["123456789"], age: "23" };
-		const emptyHobbies = { username: "admin", hobbies: "soccer", age: 23 };
-		const wrongHobbiesArrayType = { username: "admin", hobbies: [123,43], age: 23 };
-		const correctUserBody = { username: "admin", hobbies: ["soccer", "baseball"], age: 23 };
-		const resultEmptyUsername = await request(server).post("/api/users").send(emptyUsername);
-		const resultEmptyAge = await request(server).post("/api/users").send(emptyAge);
-		const resultEmptyHobbies = await request(server).post("/api/users").send(emptyHobbies);
-		const resultWrongTypeHobby = await request(server).post("/api/users").send(wrongHobbiesArrayType);
-		const resultCorrect = await request(server).post("/api/users").send(correctUserBody);
-    
-		expect(resultEmptyUsername.statusCode).toBe(StatusCode.BAD_REQUEST);
-		expect(resultEmptyUsername.body).toEqual({ error: ErrorMessage.REQUEST_BODY_FORMAT_INVALID });
-		expect(resultEmptyAge.statusCode).toBe(StatusCode.BAD_REQUEST);
-		expect(resultEmptyAge.body).toEqual({ error: ErrorMessage.REQUEST_BODY_FORMAT_INVALID });
-		expect(resultEmptyHobbies.statusCode).toBe(StatusCode.BAD_REQUEST);
-		expect(resultEmptyHobbies.body).toEqual({ error: ErrorMessage.REQUEST_BODY_FORMAT_INVALID });
-		expect(resultWrongTypeHobby.statusCode).toBe(StatusCode.BAD_REQUEST);
-		expect(resultWrongTypeHobby.body).toEqual({ error: ErrorMessage.REQUEST_BODY_FORMAT_INVALID });
-		expect(resultCorrect.statusCode).toBe(StatusCode.BAD_REQUEST);
-		expect(resultCorrect.body).toEqual({ error: ErrorMessage.REQUEST_BODY_FORMAT_INVALID });
-	});*/
-	//todo invalid body(empty, incorrect type of fields, less then 3 field, more then 3 field, name - empty, age - empty, array - string array)
-	//todo invalid method + 
-	// todo empty body for update
+  	
 });

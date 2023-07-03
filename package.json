@@ -6,9 +6,7 @@
     "test": "jest",
     "start:multi": "cross-env MULTI=true nodemon",
     "start:dev": "nodemon",
-    "start:dev:multi": "",
     "start:prod": "tsc && node build/index.js",
-    "start:prod:multi": "",
     "build": "tsc src/index.ts",
     "start": "ts-node src/index.ts",
     "lint": "npx eslint ./src"
